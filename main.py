@@ -38,7 +38,7 @@ if not os.path.exists("full/vaccines.csv"):
         f.write(header_row)
 with open("full/vaccines.csv","a",encoding="utf8") as f:
     for region in today_json:
-        row_text = "\t".join(
+        row_text = ",".join(
             str(i) for i in [
                 region["code"],
                 region_name_dictionary[region["code"]]["ru"],
