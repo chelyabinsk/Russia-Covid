@@ -27,17 +27,8 @@ jobs:
 
       # Download data from the website
       - name: Scrape data
-        run: python main.py
-
-      # Update repository
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+        run: python main.py    
     
-    
-      - uses: actions/checkout@v1
-
       - uses: actions/setup-node@v1
 
       - name: Fetch resources
