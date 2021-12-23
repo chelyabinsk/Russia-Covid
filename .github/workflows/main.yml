@@ -26,8 +26,8 @@ jobs:
 
       - uses: actions/setup-node@v1
 
-      - name: Fetch resources
-        run: ./scripts/fetch-resources.sh
+      #- name: Fetch resources
+      #  run: ./scripts/fetch-resources.sh
 
       - name: Update resources
         uses: test-room-7/action-update-file@v1
