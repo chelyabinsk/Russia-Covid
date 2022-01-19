@@ -9,12 +9,20 @@ import re
 import os
 import datetime
 import random
+import time
 
 url = "https://стопкоронавирус.рф/information/"
 data_base_url_format = "https://xn--80aesfpebagmfblc0a.xn--p1ai/covid_data.json?do=region_stats&code={}"
 datetime_str = datetime.datetime.now().strftime("%Y-%m-%d")
 
-webpage_html = requests.get(url)
+success = False
+while not success:
+    try:
+        webpage_html = requests.get(url)
+        success = True
+    except:
+        print("full page: failure")
+        time.sleep(random.randint(10, 50))
 #region_codes = re.findall('data-code=\"(.*?)\"',webpage_html.text)
 
 # Dictionary of names
@@ -30,7 +38,7 @@ for region in today_json:
         os.makedirs(directory)
     with open(directory + "/vaccines.json", "w", encoding="utf8") as f:
         f.write(json.dumps(region))
-        
+
 # Write full table
 if not os.path.exists("full/vaccines.csv"):
     header_row = "Folder name, Region name Russian, Region name English, Date, Extract Date, Infected, Recovered, Deceased, First jab, Second jab, Immunity pct\n"
@@ -64,15 +72,25 @@ alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
 json_list = []
 # Download and save raw JSON files
+c = 0
 for code in region_name_dictionary.keys():
+    c += 1
+    print("{} : {} out of {}".format(code,c,len(region_name_dictionary.keys())))
     directory = "regions/{}/{}".format(code,datetime_str)
     data_base_url = data_base_url_format.format(code)
     if not os.path.exists(directory):
         os.makedirs(directory)
     useragent = "".join([alphabet[random.randint(0,len(alphabet)-1)] for i in range(random.randint(0,36))])
     headers = {"User-Agent": useragent}
-    print(code)
-    json_response = requests.get(data_base_url,headers=headers).json()
+    
+    success = False
+    while not success:
+        try:
+            json_response = requests.get(data_base_url,headers=headers).json()
+            success = True
+        except:
+            print(code + ": failure")
+            time.sleep(random.randint(10, 50))
     json_list.append(json_response)
     
     with open(directory + "/data.json","w") as f:
